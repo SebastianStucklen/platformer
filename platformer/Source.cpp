@@ -24,22 +24,45 @@ int main() {
 	// GAME LOOP ---------------------------
 	while (screen.isOpen()) {
 		// input section -----------------------
+		while (screen.pollEvent(event)) {
 
+			//checks if user clicks the x button in the corner
+			if (event.type == sf::Event::EventType::Closed)
+				screen.close();
+			//keyboard input
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) keys[2] = true;
+			else keys[2] = false;
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) keys[0] = true;
+			else keys[0] = false;
+		}
 
 		// physics section ---------------------
+			//JUMPING
+
 		if (ypos + 30 > 800) { //check if were on the bottom of the screen
 			isOnGround = true;
 			ypos = 800 - 30; // reset position so feet are on the ground
 		}
 		else
 			isOnGround = false;
-		// apply gravity if not on ground
+			// apply gravity if not on ground
 		if (isOnGround == false) {
 			vy += 1;
 			if (vy > 5)//set terminal/maximum velocity
 				vy = 5;
 		}
-		// move the player
+			// move the player
+		if (keys[2] == true)
+			if (isOnGround == true) {
+				vy = -15;
+				isOnGround = false;
+			}
+			// right movement
+		if (keys[0] == true)
+			vx = 8;
+		else
+			vx = 0;
 		xpos += vx;
 		ypos += vy;
 		player.setPosition(xpos, ypos);
